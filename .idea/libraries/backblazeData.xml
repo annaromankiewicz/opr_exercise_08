@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="backblazeData">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../material/backblazeData.jar!/" />
+      <root url="jar://$PROJECT_DIR$/material/backblazeData.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

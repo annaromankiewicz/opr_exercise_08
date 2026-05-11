@@ -2,14 +2,15 @@ import at.fhhgb.mc.opr.backblazedata.loaders.HardDiskDataSource;
 import at.fhhgb.mc.opr.backblazedata.model.HardDisk;
 import at.fhhgb.mc.opr.backblazedata.model.SMARTValue;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class DummyHardDiskDataSource implements HardDiskDataSource  {
-    private List<HardDisk> hardDisks = new ArrayList<>();
+    private Vector<HardDisk> hardDisks = new Vector<>();
     private int count = 0;
+
+    public Vector get() {
+        return this.hardDisks;
+    }
 
     public DummyHardDiskDataSource() {
         hardDisks.add(new HardDisk(
@@ -37,6 +38,7 @@ public class DummyHardDiskDataSource implements HardDiskDataSource  {
                 new LinkedList<>(List.of(new SMARTValue(1, 10L, 10L), new SMARTValue(5, 99L, 99L)))
         ));
     }
+
 
     @Override
     public HardDisk next() {

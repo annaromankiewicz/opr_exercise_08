@@ -68,7 +68,7 @@ public class DataProcessorManual {
         Long sum = 0L;
         if (function == null) throw new IllegalArgumentException("Comparator is null");
         for (HardDisk elem : hardDisks) {
-            sum =+ function.apply(elem);
+            sum += function.apply(elem);
         }
         return (double)sum/hardDisks.size();
     }
@@ -88,14 +88,10 @@ public class DataProcessorManual {
             sortedVectorL.add(function.apply(elem));
         }
         int index = hardDisks.size() / 2;
-        boolean par;
         if (sortedVectorL.size() % 2 != 0) {
-            par = false;
-        } else {
-            par = true;
+            return sortedVectorL.get(index);
         }
-        if (!par) return sortedVectorL.get(index);
-        return ((sortedVectorL.get(index) + sortedVectorL.get(index - 1)) / 2);
+        return index;
     }
 
 

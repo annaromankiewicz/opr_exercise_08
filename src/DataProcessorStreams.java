@@ -65,14 +65,10 @@ public class DataProcessorStreams {
         Vector<Long> sortedVector = new Vector<Long>();
         hardDisks.stream().sorted(sortingComparator).map(function).forEach(sortedVector::add);
         int index = hardDisks.size()/2;
-        boolean par;
-        if (sortedVector.size()%2 != 0) {
-            par = false;
-        } else {
-            par = true;
+        if (sortedVector.size() % 2 != 0) {
+            return sortedVector.get(index);
         }
-        if (!par) return sortedVector.get(index);
-        return ((sortedVector.get(index)+sortedVector.get(index-1))/2);
+        return index;
     }
 
 
