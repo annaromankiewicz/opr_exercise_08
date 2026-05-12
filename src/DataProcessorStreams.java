@@ -11,7 +11,11 @@ public class DataProcessorStreams {
 
     public DataProcessorStreams(Vector<HardDisk> hardDisks) {
         if (hardDisks == null) throw new IllegalArgumentException("hardDisks is null");
-        this.hardDisks = hardDisks;
+        Vector<HardDisk> copy = new Vector<HardDisk>();
+        for (HardDisk elem : hardDisks) {            // clone the hardDisks to not modify the original list
+            copy.add(new HardDisk(elem.getDateOfEntry(), elem.getSerialNumber(), elem.getModel(), elem.getCapacityInBytes(), elem.isFailing(), elem.getSmartValues()));
+        }
+        this.hardDisks = copy;
     }
 
 
@@ -53,7 +57,7 @@ public class DataProcessorStreams {
 
     // Returns a mean value specified by the function
     public double mean(Function<HardDisk, Long> function) {
-        if (function == null) throw new IllegalArgumentException("Comparator is null");
+        if (function == null) throw new IllegalArgumentException("Function is null");
         return hardDisks.stream().map(function).mapToLong(x->x).average().orElseThrow(); // converts Stream<Long> into a LongStream: necessary to use function average
     }
 
@@ -68,7 +72,7 @@ public class DataProcessorStreams {
         if (sortedVector.size() % 2 != 0) {
             return sortedVector.get(index);
         }
-        return index;
+        return (sortedVector.get(index)+sortedVector.get(index-1))/2;
     }
 
 

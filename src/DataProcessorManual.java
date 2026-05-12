@@ -9,7 +9,11 @@ public class DataProcessorManual {
 
     public DataProcessorManual(Vector<HardDisk> hardDisks) {
         if (hardDisks == null) throw new IllegalArgumentException("hardDisks is null");
-        this.hardDisks = hardDisks;
+        Vector<HardDisk> copy = new Vector<HardDisk>();
+        for (HardDisk elem : hardDisks) {            // clone the hardDisks to not modify the original list
+            copy.add(new HardDisk(elem.getDateOfEntry(), elem.getSerialNumber(), elem.getModel(), elem.getCapacityInBytes(), elem.isFailing(), elem.getSmartValues()));
+        }
+        this.hardDisks = copy;
     }
 
 
@@ -39,8 +43,8 @@ public class DataProcessorManual {
 
     // Returns the HardDisk with a specified maximum value
     public HardDisk max(Comparator<HardDisk> comparator) {
-        HardDisk maxHardDisk = hardDisks.getFirst();
         if (comparator == null) throw new IllegalArgumentException("Comparator is null");
+        HardDisk maxHardDisk = hardDisks.getFirst();
         for (int i = 1; i < hardDisks.size(); i++) {
             if (comparator.compare(maxHardDisk, hardDisks.get(i)) < 0) {
                 maxHardDisk = hardDisks.get(i);
@@ -66,7 +70,7 @@ public class DataProcessorManual {
     // Returns a mean value specified by the function
     public double mean(Function<HardDisk, Long> function) {
         Long sum = 0L;
-        if (function == null) throw new IllegalArgumentException("Comparator is null");
+        if (function == null) throw new IllegalArgumentException("Function is null");
         for (HardDisk elem : hardDisks) {
             sum += function.apply(elem);
         }
@@ -91,7 +95,7 @@ public class DataProcessorManual {
         if (sortedVectorL.size() % 2 != 0) {
             return sortedVectorL.get(index);
         }
-        return index;
+        return (sortedVectorL.get(index)+sortedVectorL.get(index-1))/2;
     }
 
 

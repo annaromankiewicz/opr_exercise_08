@@ -8,9 +8,6 @@ public class DummyHardDiskDataSource implements HardDiskDataSource  {
     private Vector<HardDisk> hardDisks = new Vector<>();
     private int count = 0;
 
-    public Vector get() {
-        return this.hardDisks;
-    }
 
     public DummyHardDiskDataSource() {
         hardDisks.add(new HardDisk(
@@ -42,6 +39,8 @@ public class DummyHardDiskDataSource implements HardDiskDataSource  {
 
     @Override
     public HardDisk next() {
+        if (hardDisks.isEmpty()) throw new IndexOutOfBoundsException("Vector is empty");
+        if (count == hardDisks.size()) return null;
         HardDisk hd = hardDisks.get(count);
         count++;
         return hd;
