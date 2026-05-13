@@ -4,8 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -341,5 +340,36 @@ class DataProcessorManualTest {
     void countDistinctStrings_emptyVector_returnsZero() {
         DataProcessorManual p = new DataProcessorManual(disksEmpty);
         assertEquals(0L, p.countDistinctStrings(HardDisk::getModel));
+    }
+
+    // -------- end-to-end with DummyHardDiskDataSource --------
+
+    private static Vector<HardDisk> loadDummy() {
+        DummyHardDiskDataSource src = new DummyHardDiskDataSource();
+        Vector<HardDisk> v = new Vector<>();
+        HardDisk hd = src.next();
+        while (hd != null) {
+            v.add(hd);
+            hd = src.next();
+        }
+        return v;
+    }
+
+    @Test
+    void dummyDataSource_allQueries_returnExpectedValues() throws Exception {
+        DataProcessorManual p = new DataProcessorManual(loadDummy());
+
+        assertEquals(5L, p.count());
+        assertEquals(2, p.filter(HardDisk::isFailing).size());
+        assertEquals(4_000_000_000_000L,
+                p.max(Comparator.comparingLong(HardDisk::getCapacityInBytes)).getCapacityInBytes());
+        assertEquals(500_000_000_000L,
+                p.min(Comparator.comparingLong(HardDisk::getCapacityInBytes)).getCapacityInBytes());
+        assertEquals(1_650_000_000_000.0, p.mean(HardDisk::getCapacityInBytes), 1e-3);
+        assertEquals(1_000_000_000_000L,
+                p.median(Comparator.comparingLong(HardDisk::getCapacityInBytes),
+                        HardDisk::getCapacityInBytes));
+        assertEquals(4L, p.countDistinctStrings(HardDisk::getModel));
+        assertEquals(2.4, p.mean(x -> (long) x.getSmartValues().size()), 1e-9);
     }
 }
